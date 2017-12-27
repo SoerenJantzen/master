@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    ...
+</head>
+<body>
+    <div class="row" th:fragment="categoryOverview">
+        <div class="col-4">
+            <h3>Kategorien</h3>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#new-category-modal" style="margin-bottom: 10px !important;">Kategorie hinzufügen</button>
+            <div th:replace="menu/fragments/overview::overview(${company.categories})"></div>
+
+            <!-- modal dialog -->
+            <div id="new-category-modal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Neue Kategorie hinzufügen</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="newCategoryForm" action="#" method="post" th:action ="@{/menu/saveCategory}" th:object="${category}">
+                                <div class="form-group">
+                                    <label for="categoryName">Name</label>
+                                    <input type="text" th:field="*{name}" class="form-control" id="categoryName" name="categoryName" placeholder="Kategoriename"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="categoryDescription">Beschreibung</label>
+                                    <textarea th:field="*{description}" class="form-control" id="categoryDescription" rows="3" placeholder="Beschreibung"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="btnClose" type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                            <button type="button" class="btn btn-primary" onclick="saveCategory()">Speichern</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <h3>Kategorie - Details</h3>
+            <div id="category-details-container">
+
+            </div>
+        </div>
+        <script>
+            function showDetails(id) {
+                var url = "/menu/details/category/" + id;
+                console.log("Show details of category with id: " + id + " with URL: " + url);
+
+                $.get(url, function(data) {
+                    $("#category-details-container").html(data);
+                });
+            }
+
+            function deleteItem(id) {
+                console.log("Delete category with id: " + id);
+                var url = "/menu/deleteCategory/" + id;
+
+                $.get(url, function(data) {
+                    $("#menu-main-content").html(data);
+                });
+            }
+
+            function saveCategory() {
+                var url = "/menu/saveCategory";
+                console.log("Save new category:");
+
+                document.newCategoryForm.submit();
+
+                $('#btnClose').click();
+            }
+        </script>
+    </div>
+
+</body>
+</html>

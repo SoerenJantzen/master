@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    ...
+</head>
+<body>
+    <ul th:fragment="overview(list)" class="list-group" id="main-categories">
+        <li th:each="listElement : ${list}" class="list-group-item" th:onclick="'showDetails(' + ${listElement.id} + ')'">
+            <div class="row">
+                <div class="col-9">
+                    <h4 th:text="${listElement.name}"></h4>
+                </div>
+                <div class="col-3">
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" th:onclick="'deleteItem(' + ${listElement.id} + ')'" class="btnDelete btn btn-danger btn-sm">x</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</body>
+</html>

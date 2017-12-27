@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    ...
+</head>
+<body>
+<div class="row" th:fragment="additivesOverview">
+    <div class="col-4">
+        <h3>Zusatzstoffe</h3>
+        <button type="button" class="btn btn-success" style="margin-bottom: 10px !important;">Zusatzstoff hinzufügen</button>
+        <div th:replace="menu/fragments/overview::overview(${company.additives})"></div>
+
+    </div>
+    <div class="col-8">
+        <h3>Zusatzstoff - Details</h3>
+        <div id="additive-details-container">
+
+        </div>
+    </div>
+    <script>
+        function showDetails(id) {
+            var url = "/menu/details/additive/" + id;
+            console.log("Show details of additive with id: " + id + " with URL: " + url);
+
+            $.get(url, function(data) {
+                $("#additive-details-container").html(data);
+            });
+        }
+    </script>
+</div>
+</body>
+</html>

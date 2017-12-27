@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    ...
+</head>
+<body>
+<div class="row" th:fragment="productsOverview">
+    <div class="col-4">
+        <h3>Produkte</h3>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#new-product-modal" style="margin-bottom: 10px !important;">Produkt hinzufügen</button>
+        <div th:replace="menu/fragments/overview::overview(${company.products})"></div>
+
+        <!-- modal dialog -->
+        <div id="new-product-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Neues Produkt hinzufügen</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form  name="newProductForm" action="#" th:action="@{/menu/saveProduct}" method="post" th:object="${product}">
+                            <div class="form-group">
+                                <label for="productName">Name</label>
+                                <input type="text" th:field="*{name}" class="form-control" id="productName" name="productName" placeholder="Produktname"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="productDescription">Beschreibung</label>
+                                <textarea class="form-control" th:field="*{description}" id="productDescription" rows="3" placeholder="Beschreibung"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="productPrice">Preis</label>
+                                <input type="text" th:field="*{price}" class="form-control" id="productPrice" name="productPrice" placeholder="Preis"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="productSize">Größe</label>
+                                <select class="form-control" id="productSize">
+                                    <option value="0">auswählen</option>
+                                    <option th:each="size : ${sizes}" th:value="${size.id}" th:text="${size.name}">Größe</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="productCategory">Kategorie</label>
+                                <select th:field="*{category}" class="form-control" id="productCategory">
+                                    <option value="0">auswählen</option>
+                                    <option th:each="category : ${company.categories}" th:value="${category.id}" th:text="${category.name}">Kategorie</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnClose" type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+                        <button type="button" class="btn btn-primary" onclick="saveProduct()">Speichern</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <h3>Produkt - Details</h3>
+        <div id="product-details-container">
+
+        </div>
+    </div>
+    <script>
+        function showDetails(id) {
+            var url = "/menu/details/product/" + id;
+            console.log("Show details of product with id: " + id + " with URL: " + url);
+
+            $.get(url, function(data) {
+                $("#product-details-container").html(data);
+            });
+        }
+
+        function deleteItem(id) {
+            console.log("Delete Product with id: " + id);
+            var url = "/menu/deleteProduct/" + id;
+
+            $.get(url, function(data) {
+                $("#menu-main-content").html(data);
+            });
+        }
+
+        function saveProduct() {
+            document.newProductForm.submit();
+
+            $('#btnClose').click();
+        }
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    ...
+</head>
+<body>
+<form th:fragment="detailForm" action="#" th:action="@{/menu/saveProduct}" method="post" th:object="${product}">
+    <input type="hidden" th:field="*{id}" th:value="${product.id}"/>
+    <div class="form-group">
+        <label for="productName">Name</label>
+        <input type="text" th:field="*{name}" class="form-control" id="productName" name="productName" th:value="${product.name}"/>
+    </div>
+    <div class="form-group">
+        <label for="productDescription">Beschreibung</label>
+        <textarea th:field="*{description}" class="form-control" id="productDescription" rows="3" th:text="${product.description}"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="productPrice">Preis</label>
+        <input th:field="*{price}" type="text" class="form-control" id="productPrice" name="productPrice" th:value="${product.price}"/>
+    </div>
+    <div class="form-group">
+        <label for="productSize">Größe</label>
+        <select class="form-control" id="productSize">
+            <option th:each="size : ${sizes}" th:value="${size.id}" th:text="${size.name}">Größe</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="productCategory">Kategorie</label>
+        <select th:field="*{category}" class="form-control" id="productCategory">
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">Kategorie</option>
+        </select>
+    </div>
+    <button id="btnUpdate" type="submit" class="btn btn-primary">Speichern</button>
+</form>
+</body>
+</html>

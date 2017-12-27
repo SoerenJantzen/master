@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    ...
+</head>
+<body>
+    <form th:fragment="detailForm" action="#" th:action="@{/menu/saveCategory}" method="post" th:object="${category}">
+        <input type="hidden"
+        <div class="form-group">
+            <label for="categoryName">Name</label>
+            <input type="text" class="form-control" id="categoryName" name="categoryName" th:value="${category.name}"/>
+        </div>
+        <div class="form-group">
+            <label for="category-description">Beschreibung</label>
+            <textarea class="form-control" id="category-description" rows="3" th:text="${category.description}"></textarea>
+        </div>
+    </form>
+</body>
+</html>

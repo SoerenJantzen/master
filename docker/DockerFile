@@ -1,0 +1,10 @@
+FROM openjdk:8-jdk-alpine
+MAINTAINER soerenjantzen@gmx.net
+VOLUME /tmp
+#ARG JAR_FILE
+#RUN bash -c 'touch /backend.jar'
+ADD build/libs/backend.jar backend.jar
+# ADD ${JAR_FILE} backend.jar
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/backend.jar"]
+#COPY build/libs/*.jar /app/backend.jar
+#CMD ["java", "-jar", "/app/backend.jar"]
