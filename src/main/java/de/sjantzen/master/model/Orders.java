@@ -1,54 +1,72 @@
 package de.sjantzen.master.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import de.sjantzen.master.Utils.DateFormat;
+import de.sjantzen.master.Utils.Translator;
 import de.sjantzen.master.constants.OrderStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Entity
 public class Orders {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Orders.class);
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="ID")
     private long id;
+
     @Column(name="ORDER_RECEIVED_DATETIME")
     private Date orderReceivedDatetime;
+
     @Column(name="DUE_DATETIME")
     private Date dueDatetime;
+
     @ManyToMany
     @JoinTable(name = "ORDER2PRODUCT")
     private List<Product> products; // has to be a list, products can be ordered multiple times
-    @Column(name="ALREADY_PAYED")
-    private Boolean alreadyPayed;
+
     @Column(name="PICK_UP_NUMBER")
     private String pickUpNumber;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="COMPANY_ID")
     private Company company;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="USER_ID")
+    private User user;
 
     public Orders() {
     }
 
     /**
      * Constructor.
-     * @param companyId
-     * @param userId
+     * @param user
+     * @param company
      * @param orderReceivedDatetime
      * @param dueDatetime
      * @param products
-     * @param alreadyPayed
      * @param pickUpNumber
-     * @param orderStatus
      */
-    public Orders(BigDecimal companyId, BigDecimal userId, Date orderReceivedDatetime, Date dueDatetime, List<Product> products, Boolean alreadyPayed, String pickUpNumber, OrderStatus orderStatus) {
+    public Orders(User user, Company company, Date orderReceivedDatetime, Date dueDatetime, List<Product> products, String pickUpNumber) {
+        this.user = user;
+        this.company = company;
         this.orderReceivedDatetime = orderReceivedDatetime;
         this.dueDatetime = dueDatetime;
         this.products = products;
-        this.alreadyPayed = alreadyPayed;
         this.pickUpNumber = pickUpNumber;
     }
 
@@ -64,6 +82,10 @@ public class Orders {
         return dueDatetime;
     }
 
+    public String getDueDatetimeTranslated() {
+        return Translator.getDatetimeFormatted(dueDatetime, DateFormat.MIDDLE);
+    }
+
     public void setDueDatetime(Date dueDatetime) {
         this.dueDatetime = dueDatetime;
     }
@@ -72,16 +94,22 @@ public class Orders {
         return products;
     }
 
+    /**
+     * Returns a map containing the products'names and the amount of this products.
+     * @return
+     */
+    public Map<String, Integer> getProductsMap() {
+        Map<String, Integer> rv = new HashMap<>();
+
+        for (Product product : products) {
+            rv.put(product.getName(), (rv.containsKey(product.getName()) ? rv.get(product.getName()) + 1 : 1));
+        }
+
+        return rv;
+    }
+
     public void setProducts(List<Product> products) {
         this.products = products;
-    }
-
-    public Boolean getAlreadyPayed() {
-        return alreadyPayed;
-    }
-
-    public void setAlreadyPayed(Boolean alreadyPayed) {
-        this.alreadyPayed = alreadyPayed;
     }
 
     public String getPickUpNumber() {
@@ -96,6 +124,10 @@ public class Orders {
         return orderReceivedDatetime;
     }
 
+    public String getOrderReceivedDatetimeTranslated() {
+        return Translator.getDatetimeFormatted(orderReceivedDatetime, DateFormat.MIDDLE);
+    }
+
     public void setOrderReceivedDatetime(Date orderReceivedDatetime) {
         this.orderReceivedDatetime = orderReceivedDatetime;
     }
@@ -108,5 +140,11 @@ public class Orders {
         this.company = company;
     }
 
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

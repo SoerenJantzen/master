@@ -1,7 +1,9 @@
 package de.sjantzen.master.model;
 
 import javax.persistence.*;
+import javax.persistence.criteria.Order;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -10,18 +12,27 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="ID")
     private long id;
+
     @Column(name="USERNAME")
     private String userName;
+
     @Column(name="PASSWORD")
     private String password;
+
     @Column(name="LOCK_CODE")
     private String lockCode;
-    @Column(name="FIRSTNAME")
-    private String firstName;
-    @Column(name="LASTNAME")
-    private String lastName;
+
     @Column(name="EMAIL")
     private String eMail;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Orders> orders;
+
+    /*
+     * TODO Zahlungsmehtoden - hier weiß ich noch nicht, wie ich das genau umsetzen will
+     * - entweder mit spalten wie 'Kreditkarte', 'PaypalAdresse' und so
+     * - ODER mit einzelnen Tabellen für die Zahlungsmehtoden
+     */
 
     public User() {
     }
@@ -31,18 +42,15 @@ public class User {
      * @param userName
      * @param password
      * @param lockCode
-     * @param firstName
-     * @param lastName
      * @param eMail
+     * @param orders
      */
-    public User(String userName, String password, String lockCode, String firstName, String lastName, String eMail) {
+    public User(String userName, String password, String lockCode, String eMail, Set<Orders> orders) {
         this.userName = userName;
         this.password = password;
         this.lockCode = lockCode;
-        this.firstName = firstName;
-        this.lastName = lastName;
         this.eMail = eMail;
-        //this.address = address;
+        this.orders = orders;
     }
 
     public long getId() {
@@ -77,22 +85,6 @@ public class User {
         this.lockCode = lockCode;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String geteMail() {
         return eMail;
     }
@@ -101,15 +93,11 @@ public class User {
         this.eMail = eMail;
     }
 
-    /*
-    public Address getAddress() {
-        return address;
+    public Set<Orders> getOrders() {
+        return orders;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setOrders(Set<Orders> orders) {
+        this.orders = orders;
     }
-    */
-
-
 }

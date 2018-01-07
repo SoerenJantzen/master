@@ -1,5 +1,7 @@
 package de.sjantzen.master.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -10,13 +12,19 @@ public class Address {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="ID")
     private int id;
+
     @Column(name="STREET")
     private String street;
+
     @Column(name="ZIP")
     private String zip;
+
     @Column(name="CITY")
     private String city;
-    @OneToOne(mappedBy = "address")
+
+    @JsonBackReference
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
     private Company company;
 
     public Address() {
@@ -27,11 +35,13 @@ public class Address {
      * @param street
      * @param zip
      * @param city
+     * @param company
      */
-    public Address(String street, String zip, String city) {
+    public Address(String street, String zip, String city, Company company) {
         this.street = street;
         this.zip = zip;
         this.city = city;
+        this.company = company;
     }
 
     public int getId() {

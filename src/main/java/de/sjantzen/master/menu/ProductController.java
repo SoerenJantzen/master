@@ -56,7 +56,7 @@ public class ProductController {
             LOG.info("Deleted product with id: " + productId);
         }
 
-        final Company company = companyRepository.findOne(6L);
+        final Company company = companyRepository.findOne(1L);
 
         model.addAttribute("company", company);
         model.addAttribute("sizes", Size.values());

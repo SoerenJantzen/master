@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    ...
+</head>
+<body>
+<div th:fragment="orderDetails">
+    <h1>Details</h1>
+    <div class="form-group">
+        <label for="receivedDatetime">Eingegangen</label>
+        <input readonly="readonly" type="text" class="form-control" id="receivedDatetime" name="receivedDatetime" th:value="${order.orderReceivedDatetimeTranslated}"/>
+    </div>
+    <div class="form-group">
+        <label for="dueDatetime">Abholung</label>
+        <input readonly="readonly" type="text" class="form-control" id="dueDatetime" name="dueDatetime" th:value="${order.dueDatetimeTranslated}"/>
+    </div>
+    <div class="form-group">
+        <label for="alreadyPayed">Bereits bezahlt</label>
+        <input readonly="readonly" type="text" class="form-control" id="alreadyPayed" name="alreadyPayed" th:value="${order.alreadyPayedTranslated}"/>
+    </div>
+    <div class="form-group">
+        <label for="pickUpNumber">Abholnummer</label>
+        <input readonly="readonly" type="text" class="form-control" id="pickUpNumber" name="pickUpNumber" th:value="${order.pickUpNumber}"/>
+    </div>
+    <div class="form-group">
+        <label for="products">Produkte</label>
+        <table id="products" class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Anzahl</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="product : ${order.productsMap}">
+                    <td scope="row" th:text="${product.key}">name</td>
+                    <td th:text="${product.value}">count</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

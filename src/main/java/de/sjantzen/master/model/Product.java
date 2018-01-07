@@ -1,5 +1,7 @@
 package de.sjantzen.master.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.sjantzen.master.constants.Size;
 import org.springframework.util.CollectionUtils;
 
@@ -16,15 +18,23 @@ public class Product {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="ID")
     private long id;
+
+    @Column(name = "ORDER_NUMBER")
+    private int orderNumber;
+
     @Column(name="NAME")
     private String name;
+
     @Column(name="DESCRIPTION")
     private String description;
+
     @Column(name="PRICE")
     private BigDecimal price;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="CATEGORY_ID")
     private Category category;
+
     @ManyToMany(mappedBy="products")
     private List<Orders> orders;
 
@@ -34,14 +44,18 @@ public class Product {
 
     /**
      * Constructor.
+     * @param orderNumber
      * @param name
      * @param description
      * @param price
      */
-    public Product(String name, String description, BigDecimal price) {
+    public Product(int orderNumber, String name, String description, BigDecimal price, Category category, List<Orders> orders) {
+        this.orderNumber = orderNumber;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.category = category;
+        this.orders = orders;
     }
 
     public long getId() {
@@ -50,6 +64,14 @@ public class Product {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public String getName() {
@@ -76,6 +98,7 @@ public class Product {
         this.price = price;
     }
 
+    @JsonIgnore
     public Category getCategory() {
         return category;
     }
@@ -84,6 +107,7 @@ public class Product {
         this.category = category;
     }
 
+    @JsonIgnore
     public List<Orders> getOrders() {
         return orders;
     }

@@ -39,7 +39,7 @@ public class CategoryController {
         LOG.info("CAT NAME: " + category.getName());
         LOG.info("CAT DESCRIPTION: " + category.getDescription());
 
-        final Company company = companyRepository.findOne(6L);
+        final Company company = companyRepository.findOne(1L);
 
         // Save new Category
         category.setCompany(company);
@@ -57,7 +57,7 @@ public class CategoryController {
             LOG.info("Deleted category with id: " + categoryId);
         }
 
-        final Company company = companyRepository.findOne(6L);
+        final Company company = companyRepository.findOne(1L);
 
         model.addAttribute("company", company);
         model.addAttribute("sizes", Size.values());

@@ -1,6 +1,7 @@
 package de.sjantzen.master.model;
 
-import de.sjantzen.master.menu.MenuController;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -13,21 +14,29 @@ import java.util.stream.Collectors;
 @Entity
 public class Company {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MenuController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Company.class);
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="ID")
     private long id;
+
     @Column(name="NAME")
     private String name;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ADDRESS_ID")
+
+    @JsonManagedReference
+    @OneToOne(mappedBy = "company")
     private Address address;
+
     @OneToMany(mappedBy = "company")
     private Set<Orders> orders;
+
     @OneToMany(mappedBy = "company")
     private Set<Category> categories;
+
+    @JsonManagedReference
+    @OneToOne(mappedBy = "company")
+    private OpeningHours openingHours;
 
     /**
      * Default constructor.
@@ -42,12 +51,14 @@ public class Company {
      * @param address
      * @param orders
      * @param categories
+     * @param openingHours
      */
-    public Company(String name, Address address, Set<Orders> orders, Set<Category> categories) {
+    public Company(String name, Address address, Set<Orders> orders, Set<Category> categories, OpeningHours openingHours) {
         this.name = name;
         this.address = address;
         this.orders = orders;
         this.categories = categories;
+        this.openingHours = openingHours;
     }
 
     public long getId() {
@@ -74,6 +85,7 @@ public class Company {
         this.address = address;
     }
 
+    @JsonIgnore
     public Set<Orders> getOrders() {
         return orders;
     }
@@ -93,6 +105,7 @@ public class Company {
         this.categories = categories;
     }
 
+    @JsonIgnore
     public Set<Product> getProducts() {
         if (!CollectionUtils.isEmpty(categories)) {
             return categories.stream().flatMap(category -> category.getProducts().stream()).collect(Collectors.toSet());
@@ -100,5 +113,11 @@ public class Company {
         return new HashSet<>();
     }
 
+    public OpeningHours getOpeningHours() {
+        return openingHours;
+    }
 
+    public void setOpeningHours(OpeningHours openingHours) {
+        this.openingHours = openingHours;
+    }
 }
