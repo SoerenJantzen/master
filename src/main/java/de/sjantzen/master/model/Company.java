@@ -25,7 +25,7 @@ public class Company {
     private String name;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "company")
+    @OneToOne(mappedBy = "company", cascade=CascadeType.PERSIST)
     private Address address;
 
     @OneToMany(mappedBy = "company")
@@ -37,6 +37,15 @@ public class Company {
     @JsonManagedReference
     @OneToOne(mappedBy = "company")
     private OpeningHours openingHours;
+
+    @OneToMany(mappedBy = "company")
+    private Set<Account> accounts;
+
+    // TODO fehlende Felder
+    // - Küchenrichtung
+    // - Telefonnummer
+    // - Website
+    // - Bewertung ? vllt sowas wie yelp einbinden?
 
     /**
      * Default constructor.
@@ -52,13 +61,15 @@ public class Company {
      * @param orders
      * @param categories
      * @param openingHours
+     * @param accounts
      */
-    public Company(String name, Address address, Set<Orders> orders, Set<Category> categories, OpeningHours openingHours) {
+    public Company(String name, Address address, Set<Orders> orders, Set<Category> categories, OpeningHours openingHours, Set<Account> accounts) {
         this.name = name;
         this.address = address;
         this.orders = orders;
         this.categories = categories;
         this.openingHours = openingHours;
+        this.accounts = accounts;
     }
 
     public long getId() {
@@ -119,5 +130,14 @@ public class Company {
 
     public void setOpeningHours(OpeningHours openingHours) {
         this.openingHours = openingHours;
+    }
+
+    @JsonIgnore
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
     }
 }

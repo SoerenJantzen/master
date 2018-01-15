@@ -1,12 +1,17 @@
 package de.sjantzen.master.menu;
 
+import de.sjantzen.master.authentication.IAuthenticationFacade;
 import de.sjantzen.master.constants.OrderStatus;
 import de.sjantzen.master.constants.Size;
 import de.sjantzen.master.model.*;
 import de.sjantzen.master.repositories.*;
+import de.sjantzen.master.services.account.AccountService;
+import de.sjantzen.master.services.company.CompanyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,19 +31,13 @@ public class MenuController {
     private static final Logger LOG = LoggerFactory.getLogger(MenuController.class);
 
     @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private CompanyRepository companyRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private OrdersRepository ordersRepository;
+    private CompanyService companyService;
 
     @RequestMapping("/menu")
     public String showMenu() {
@@ -52,7 +51,7 @@ public class MenuController {
 
         LOG.debug("Update main content of menu.");
 
-        final Company company = companyRepository.findOne(1L);
+        Company company = companyService.getCompanyOfCurrentAccount();
 
         model.addAttribute("company", company);
         model.addAttribute("sizes", Size.values());
@@ -84,7 +83,7 @@ public class MenuController {
             case "product":
 
                 final Product product = productRepository.findOne(id);
-                final Company company = companyRepository.findOne(1L);
+                final Company company = companyService.getCompanyOfCurrentAccount();
                 model.addAttribute("product", product);
                 model.addAttribute("sizes", Size.values());
                 model.addAttribute("categories", company.getCategories());
@@ -99,4 +98,5 @@ public class MenuController {
 
         return "menu/fragments/category-details :: detailForm";
     }
+
 }

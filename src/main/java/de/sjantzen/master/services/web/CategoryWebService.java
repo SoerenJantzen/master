@@ -1,4 +1,4 @@
-package de.sjantzen.master.services;
+package de.sjantzen.master.services.web;
 
 import de.sjantzen.master.model.Category;
 import de.sjantzen.master.repositories.CategoryRepository;
@@ -11,13 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by sJantzen on 30.12.2017.
- */
-@Controller
-public class CategoryService {
+@RestController
+public class CategoryWebService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CategoryService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CategoryWebService.class);
 
     @Autowired
     private CategoryRepository categoryRepository;

@@ -1,22 +1,15 @@
 package de.sjantzen.master.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import de.sjantzen.master.Utils.DateFormat;
-import de.sjantzen.master.Utils.Translator;
-import de.sjantzen.master.constants.OrderStatus;
+import de.sjantzen.master.utils.DateFormat;
+import de.sjantzen.master.utils.Translator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Entity
 public class Orders {
@@ -50,6 +43,13 @@ public class Orders {
     private User user;
 
     public Orders() {
+    }
+
+    public Orders (Date orderReceivedDatetime, Date dueDatetime, String pickUpNumber, List<Product> products){
+        this.orderReceivedDatetime = orderReceivedDatetime;
+        this.dueDatetime = dueDatetime;
+        this.pickUpNumber = pickUpNumber;
+        this.products = products;
     }
 
     /**

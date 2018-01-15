@@ -1,4 +1,4 @@
-package de.sjantzen.master.services;
+package de.sjantzen.master.services.web;
 
 import de.sjantzen.master.model.Company;
 import de.sjantzen.master.repositories.CompanyRepository;
@@ -6,21 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by sJantzen on 30.12.2017.
- */
-@Controller
-public class CompanyService {
+@RestController
+public class CompanyWebService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CompanyService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CompanyWebService.class);
 
     @Autowired
     private CompanyRepository companyRepository;

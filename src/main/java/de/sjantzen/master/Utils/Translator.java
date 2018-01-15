@@ -1,4 +1,4 @@
-package de.sjantzen.master.Utils;
+package de.sjantzen.master.utils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

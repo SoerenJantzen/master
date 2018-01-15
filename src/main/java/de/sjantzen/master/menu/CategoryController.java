@@ -6,6 +6,7 @@ import de.sjantzen.master.model.Company;
 import de.sjantzen.master.model.Product;
 import de.sjantzen.master.repositories.CategoryRepository;
 import de.sjantzen.master.repositories.CompanyRepository;
+import de.sjantzen.master.services.company.CompanyService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class CategoryController {
     private static final Logger LOG = LoggerFactory.getLogger(MenuController.class);
 
     @Autowired
-    private CompanyRepository companyRepository;
+    private CompanyService companyService;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -39,7 +40,7 @@ public class CategoryController {
         LOG.info("CAT NAME: " + category.getName());
         LOG.info("CAT DESCRIPTION: " + category.getDescription());
 
-        final Company company = companyRepository.findOne(1L);
+        final Company company = companyService.getCompanyOfCurrentAccount();
 
         // Save new Category
         category.setCompany(company);
@@ -57,7 +58,7 @@ public class CategoryController {
             LOG.info("Deleted category with id: " + categoryId);
         }
 
-        final Company company = companyRepository.findOne(1L);
+        final Company company = companyService.getCompanyOfCurrentAccount();
 
         model.addAttribute("company", company);
         model.addAttribute("sizes", Size.values());

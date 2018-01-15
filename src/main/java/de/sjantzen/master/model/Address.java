@@ -23,7 +23,7 @@ public class Address {
     private String city;
 
     @JsonBackReference
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.PERSIST)
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
 

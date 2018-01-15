@@ -66,7 +66,7 @@ public class DummyInitializer {
                 "12:00", "22:00","12:00", "22:00","12:00", "22:00", null);
         openingHoursRepository.save(openingHours);
 
-        final Company comp1 = new Company("Athena-Roma", address1, null, new HashSet<Category>(), openingHours);
+        final Company comp1 = new Company("Athena-Roma", address1, null, new HashSet<Category>(), openingHours, null);
         companyRepository.save(comp1);
 
         address1.setCompany(comp1);
@@ -164,7 +164,7 @@ public class DummyInitializer {
                 "10:00", "23:00", "10:00", "23:00","10:00", "18:00", null);
         openingHoursRepository.save(openingHours2);
 
-        final Company comp2 = new Company("Vilja Café", address2, null, new HashSet<Category>(), openingHours2);
+        final Company comp2 = new Company("Vilja Café", address2, null, new HashSet<Category>(), openingHours2, null);
         companyRepository.save(comp2);
 
         address2.setCompany(comp2);
@@ -253,7 +253,7 @@ public class DummyInitializer {
         /*
          * USER
          */
-        User user1 = new User("testUser1", "password1", "", "soerenjantzen@gmx.net", new HashSet<Orders>());
+        User user1 = new User("testUser1", "password1", "", "soerenjantzen@gmx.net", 1, new HashSet<Orders>());
         userRepository.save(user1);
 
         /*
