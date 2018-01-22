@@ -1,5 +1,7 @@
 package de.sjantzen.master.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.persistence.criteria.Order;
 import java.math.BigDecimal;
@@ -117,6 +119,7 @@ public class User {
         this.active = active;
     }
 
+    @JsonIgnore
     public Set<Orders> getOrders() {
         return orders;
     }

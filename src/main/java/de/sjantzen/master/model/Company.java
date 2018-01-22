@@ -105,6 +105,7 @@ public class Company {
         this.orders = orders;
     }
 
+
     public Set<Category> getCategories() {
         if (!CollectionUtils.isEmpty(categories)) {
             return categories;

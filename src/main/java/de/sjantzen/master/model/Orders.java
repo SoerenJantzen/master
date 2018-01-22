@@ -1,5 +1,6 @@
 package de.sjantzen.master.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.sjantzen.master.utils.DateFormat;
 import de.sjantzen.master.utils.Translator;
 import org.slf4j.Logger;
@@ -38,14 +39,51 @@ public class Orders {
     @JoinColumn(name="COMPANY_ID")
     private Company company;
 
+    @Column(name = "COMPANY_ID", insertable=false, updatable = false)
+    private long companyId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="USER_ID")
     private User user;
 
+    @Column(name = "USER_ID", insertable=false, updatable = false)
+    private long userId;
+
+    private String userEmail;
+
     public Orders() {
     }
 
-    public Orders (Date orderReceivedDatetime, Date dueDatetime, String pickUpNumber, List<Product> products){
+    /**
+     * Custom constructor.
+     * @param userEmail
+     * @param company
+     * @param orderReceivedDatetime
+     * @param dueDatetime
+     * @param pickUpNumber
+     * @param products
+     */
+    public Orders (String userEmail, Company company, Date orderReceivedDatetime, Date dueDatetime, String pickUpNumber, List<Product> products){
+        this.userEmail = userEmail;
+        this.company = company;
+        this.orderReceivedDatetime = orderReceivedDatetime;
+        this.dueDatetime = dueDatetime;
+        this.pickUpNumber = pickUpNumber;
+        this.products = products;
+    }
+
+    /**
+     * Custom constructor.
+     * @param userEmail
+     * @param companyId
+     * @param orderReceivedDatetime
+     * @param dueDatetime
+     * @param pickUpNumber
+     * @param products
+     */
+    public Orders (String userEmail, long companyId, Date orderReceivedDatetime, Date dueDatetime, String pickUpNumber, List<Product> products){
+        this.userEmail = userEmail;
+        this.companyId = companyId;
         this.orderReceivedDatetime = orderReceivedDatetime;
         this.dueDatetime = dueDatetime;
         this.pickUpNumber = pickUpNumber;
@@ -98,6 +136,7 @@ public class Orders {
      * Returns a map containing the products'names and the amount of this products.
      * @return
      */
+    @JsonIgnore
     public Map<String, Integer> getProductsMap() {
         Map<String, Integer> rv = new HashMap<>();
 
@@ -132,19 +171,63 @@ public class Orders {
         this.orderReceivedDatetime = orderReceivedDatetime;
     }
 
+    @JsonIgnore
     public Company getCompany() {
         return company;
+    }
+
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
+    }
+
+    public Long getCompanyId() {
+        if (company != null) {
+            return company.getId();
+        }
+
+        return companyId;
+    }
+
+    public String getCompanyName() {
+        if (company != null) {
+            return company.getName();
+        }
+        return "";
     }
 
     public void setCompany(Company company) {
         this.company = company;
     }
 
+    @JsonIgnore
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public long getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    @Override
+    public String toString() {
+        return "id: " + id + "; user: " + (user != null ? user.getId() : "") + "; company: "
+                + (company != null ? company.getId() : "") + "; dueDatetime: " + dueDatetime
+                + "; receivedDatetime: " + orderReceivedDatetime + "; pickUpNumber: " + pickUpNumber;
     }
 }
